@@ -1,5 +1,13 @@
 let openedPopup = null;
 
+function saving(isSave, popupButton) {
+  if(isSave) {
+    popupButton.textContent = 'Сохранение...'
+  } else {
+    popupButton.textContent = 'Сохранить'
+  }
+}
+
 function openModal(popupElement) {
   openedPopup = popupElement;
   openedPopup.classList.add("popup_is-opened");
@@ -32,4 +40,4 @@ function closeModalOnOverlayOrClose(evt) {
   }
 }
 
-export { openModal, closeModal };
+export { openModal, closeModal, saving};

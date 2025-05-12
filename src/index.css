@@ -13,4 +13,37 @@
 
 .profile__image {
   background-image: url('./images/avatar.jpg');
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.profile__image::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0);
+  transition: background-color 0.3s ease;
+  z-index: 1;
+}
+
+.profile__image:hover::after {
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
+.redact-image-btn {
+  display: none;
+  position: relative;
+  z-index: 2;
+}
+
+.profile__image:hover .redact-image-btn {
+  display: block;
+}
+
+fieldset {
+  border: none;
+  outline: none;
 }
