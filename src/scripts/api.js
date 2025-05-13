@@ -3,32 +3,29 @@ const config = {
   authorization: '1f8e2a8a-f6e1-4325-8bc4-fc2c4878ac28',
 };
 
+function handleResponse(res) {
+  if (res.ok) {
+    return res.json();
+  }
+  return Promise.reject(`Ошибка: ${res.status}`);
+}
+
 export function getUserInfo () {
   return fetch(`${config.baseUrl}/users/me`, {
     headers: {
       authorization: config.authorization
     }
   })
-  .then(res => {
-    if(res.ok) {
-      return res.json()
-    }
-    return Promise.reject(`Ошибка: ${res.status}`)
-  })
+  .then(handleResponse)
 }
 
-export function getStartingCards(userId) {
+export function getStartingCards() {
   return fetch(`${config.baseUrl}/cards`, {
     headers: {
       authorization: config.authorization
     }
   })
-  .then(res => {
-    if(res.ok) {
-      return res.json()
-    }
-    return Promise.reject(`Ошибка: ${res.status}`)
-  })
+  .then(handleResponse)
 }
 
 export function patchUserInfo(name, about) {
@@ -43,12 +40,7 @@ export function patchUserInfo(name, about) {
       about,
     })
   })
-  .then(res => {
-    if(res.ok) {
-      return res.json()
-    }
-    return Promise.reject(`Ошибка: ${res.status}`)
-  })
+  .then(handleResponse)
 }
 
 export function addNewCard (name, link) {
@@ -63,12 +55,7 @@ export function addNewCard (name, link) {
       link,
     })
   })
-  .then(res => {
-    if(res.ok) {
-      return res.json()
-    }
-    return Promise.reject(`Ошибка: ${res.status}`)
-  })
+  .then(handleResponse)
 }
 
 export function deleteCardById(cardId) {
@@ -87,12 +74,7 @@ export function likeCard (cardId) {
       authorization: config.authorization
     }
   })
-  .then(res => {
-    if(res.ok) {
-      return res.json()
-    }
-    return Promise.reject(`Ошибка: ${res.status}`)
-  })
+  .then(handleResponse)
 }
 
 export function unlikeCard (cardId) {
@@ -102,12 +84,7 @@ export function unlikeCard (cardId) {
       authorization: config.authorization
     }
   })
-  .then(res => {
-    if(res.ok) {
-      return res.json()
-    }
-    return Promise.reject(`Ошибка: ${res.status}`)
-  })
+  .then(handleResponse)
 }
 
 export function patchUserAvatar (avatarUrl) {
@@ -121,10 +98,5 @@ export function patchUserAvatar (avatarUrl) {
       avatar: avatarUrl
     })
   })
-  .then(res => {
-    if(res.ok) {
-      return res.json()
-    }
-    return Promise.reject(`Ошибка: ${res.status}`)
-  })
+  .then(handleResponse)
 }

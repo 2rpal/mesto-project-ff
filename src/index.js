@@ -1,6 +1,6 @@
 import "./index.css";
 import { createCard, deleteCard, likedCard } from "./components/card.js";
-import { openModal, closeModal, saving } from "./components/modal.js";
+import { openModal } from "./components/modal.js";
 import { enableValidation, clearValidation } from "./scripts/validation.js";
 import { getUserInfo, getStartingCards, patchUserInfo, addNewCard, patchUserAvatar} from "./scripts/api.js";
 
@@ -48,42 +48,34 @@ const placeCardLinkInput = addCardFormElement.querySelector(".popup__input_type_
 
 const imagePopup = document.querySelector(".popup_type_image");
 
-//получения данных о пользователе\
-getUserInfo()
-.then(res => {
-    userInfo.name.textContent = res.name;
-    userInfo.description.textContent = res.about;
-    userInfo.avatar.style.backgroundImage = `url(${res.avatar})`
-    userInfo.id = res._id
-})
-.catch(err => {
-  console.log(err)
-})
+//получения данных о пользователе и отрисовка стартовых карт
+Promise.all([getUserInfo(), getStartingCards()])
+  .then(([userData, cards]) => {
+    userInfo.name.textContent = userData.name;
+    userInfo.description.textContent = userData.about;
+    userInfo.avatar.style.backgroundImage = `url(${userData.avatar})`;
+    userInfo.id = userData._id;
 
-// Рендер стартовых карточек
-
-getStartingCards()
-.then(res => {
-  res.forEach((item) => {
-  const card = createCard(
-    {
-      name: item.name,
-      link: item.link,
-      likes: item.likes,
-      ownerId: item.owner._id,
-      cardId: item._id
-    },
-    userInfo.id,
-    deleteCard,
-    likedCard,
-    handleImageClick
-    );
-  cardsContainer.append(card);
+    cards.forEach((item) => {
+      const card = createCard(
+        {
+          name: item.name,
+          link: item.link,
+          likes: item.likes,
+          ownerId: item.owner._id,
+          cardId: item._id
+        },
+        userInfo.id,
+        deleteCard,
+        likedCard,
+        handleImageClick
+      );
+      cardsContainer.append(card);
+    });
+  })
+  .catch((err) => {
+    console.log(err);
   });
-})
-.catch(err => {
-  console.log(err)
-})
 
 
 // Открытие попапа с изображением
@@ -96,6 +88,11 @@ function handleImageClick({ name, link }) {
   popupCaption.textContent = name;
 
   openModal(imagePopup);
+}
+
+//функция изменения кнопки при сохранении
+function saving(isSave, popupButton) {
+  popupButton.textContent = isSave ?  'Сохранение...' : 'Сохранить' 
 }
 
 // Отправка формы редактирования профиля

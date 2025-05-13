@@ -14,17 +14,9 @@ const hideInputError = (formElement, inputElement, config) => {
 
 const checkInputValidity = (formElement, inputElement, config) => {
   if (!inputElement.validity.valid) {
-    if (inputElement.validity.valueMissing) {
-      showInputError(formElement, inputElement, 'Это поле обязательно для заполнения', config);
-    } else if (inputElement.validity.patternMismatch) {
-      const message = inputElement.dataset.errorMessage || 'Неверный формат';
+    if (inputElement.validity.patternMismatch) {
+      const message = inputElement.dataset.errorMessage || inputElement.validationMessage;
       showInputError(formElement, inputElement, message, config);
-    } else if (inputElement.validity.tooShort) {
-      showInputError(formElement, inputElement, `Минимум ${inputElement.minLength} символа`, config);
-    } else if (inputElement.validity.tooLong) {
-      showInputError(formElement, inputElement, `Максимум ${inputElement.maxLength} символов`, config);
-    } else if (inputElement.validity.typeMismatch && inputElement.type === 'url') {
-      showInputError(formElement, inputElement, 'Введите корректный URL', config);
     } else {
       showInputError(formElement, inputElement, inputElement.validationMessage, config);
     }
